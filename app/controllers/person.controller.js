@@ -33,6 +33,34 @@ exports.findAll = (req, res) => {
 
 };
 
+// Update person
+exports.put = (req, res) => {
+    // Find person and update it with the request body
+    Person.findByIdAndUpdate(req.params.personId, {
+        nombre: req.body.nombre, 
+        apellido: req.body.apellido,
+        telefono: req.body.telefono
+    }, {new: true})  //returns modified doc 
+    .then(person => {
+        if(!person) {
+            return res.status(404).send({
+                message: "Person not found with id " + req.params.personId
+            });
+        }
+        res.send(person);
+
+    }).catch(err => {
+        if(err.kind === 'ObjectId') {
+            return res.status(404).send({
+                message: "Person not found with id " + req.params.personId
+            });                
+        }
+        return res.status(500).send({
+            message: "Error updating person with id " + req.params.personId
+        });
+    });
+};
+
 // Find a single person with a personId
 exports.findOne = (req, res) => {
 
@@ -67,7 +95,7 @@ exports.delete = (req, res) => {
                 message: "Person not found with id " + req.params.personId
             });
         }
-        res.send({message: "Person deleted successfully!"});
+        res.send({message: "Person deleted successfully"});
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({
