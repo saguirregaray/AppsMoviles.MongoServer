@@ -1,3 +1,4 @@
 module.exports = {
-    url: 'mongodb://localhost:27017/appsDB'
+    urlMongo: 'mongodb://localhost:27017/pocketWearDB',
+    cassandraHost: 'localhost'
 }
